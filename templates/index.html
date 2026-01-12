@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head><script>(function(w,i,g){w[g]=w[g]||[];if(typeof w[g].push=='function')w[g].push(i)})
+(window,'GTM-KL4FQVG','google_tags_first_party');</script><script>(function(w,d,s,l){w[l]=w[l]||[];(function(){w[l].push(arguments);})('set', 'developer_id.dY2E1Nz', true);
+		var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s);j.async=true;j.src='/cake/';
+		f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer');</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>JIBL Legal Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes slideInMessage {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing-dot {
+            0%, 20% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(-6px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 0.4; }
+        }
+
+        body {
+            margin: 0;
+            background: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .header {
+            padding: 20px 24px;
+            padding-top: max(20px, env(safe-area-inset-top));
+            position: relative;
+            z-index: 100;
+            background: white;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-container img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .hamburger-menu {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background: #000000;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 40px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            background: #FFFFFF;
+            position: relative;
+        }
+
+        .chat-area::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-area::-webkit-scrollbar-thumb {
+            background: #E0E0E0;
+            border-radius: 3px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            animation: slideInMessage 0.5s ease-out;
+            z-index: 1;
+        }
+
+        .welcome-message::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(200, 180, 220, 0.15) 0%, rgba(240, 200, 220, 0.1) 50%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .welcome-message .greeting {
+            color: #000000;
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .welcome-message .title {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .title-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .welcome-message .subtitle {
+            color: #666666;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            line-height: 1.6;
+            font-size: 15px;
+            position: relative;
+            animation: slideInMessage 0.3s ease-out;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #F5F5F5;
+            color: #000000;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            background: #FFFFFF;
+            color: #000000;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .trace-button {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333333;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .trace-button:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .sources-panel {
+            background: rgba(0, 0, 0, 0.03);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 13px;
+            display: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            animation: slideInMessage 0.2s ease-out;
+        }
+
+        .source-item {
+            margin: 6px 0;
+            color: #666666;
+            transition: all 0.15s ease;
+            padding-left: 4px;
+        }
+
+        .source-item:hover {
+            transform: translateX(4px);
+            color: #000000;
+        }
+
+        .input-area {
+            padding: 20px 24px;
+            padding-bottom: max(20px, calc(env(safe-area-inset-bottom) + 20px));
+            background: #FFFFFF;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border-top: none;
+            flex-shrink: 0;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 24px;
+            background: #F5F5F5;
+            color: #000000;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            background: #EEEEEE;
+        }
+
+        .input-field::placeholder {
+            color: #999999;
+        }
+
+        .send-button {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
+            background: #cca05d;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            touch-action: manipulation;
+        }
+
+        .send-button:hover {
+            background: #FCE0BD;
+            transform: scale(1.05);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .send-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 8px solid #000;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            margin-left: 2px;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 14px 18px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #E0E0E0;
+            align-self: flex-start;
+            max-width: 70%;
+        }
+
+        .typing-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #999999;
+            animation: typing-dot 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Tablet and below */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+                padding-top: max(16px, env(safe-area-inset-top));
+            }
+
+            .logo-container img {
+                height: 40px;
+            }
+
+            .chat-area {
+                padding: 20px 16px;
+            }
+
+            .input-area {
+                padding: 16px 20px;
+                padding-bottom: max(16px, calc(env(safe-area-inset-bottom) + 16px));
+                gap: 10px;
+            }
+
+            .welcome-message {
+                padding: 60px 16px 40px;
+            }
+
+            .welcome-message::before {
+                width: 280px;
+                height: 280px;
+            }
+
+            .welcome-message .greeting {
+                font-size: 0.95rem;
+            }
+
+            .welcome-message .title {
+                font-size: 1.5rem;
+                line-height: 1.3;
+                margin-bottom: 12px;
+                gap: 8px;
+            }
+
+            .title-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .welcome-message .subtitle {
+                font-size: 0.9rem;
+                max-width: 100%;
+                padding: 0 8px;
+            }
+
+            .message {
+                max-width: 85%;
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .input-field {
+                padding: 12px 16px;
+                font-size: 16px;
+            }
+
+            .send-button {
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+        /* Mobile phones */
+        @media (max-width: 480px) {
+            .header {
+                padding: 12px 16px;
+                padding-top: max(12px, env(safe-area-inset-top));
+            }
+
+            .logo-container img {
+                height: 35px;
+            }
+
+            .chat-area {
+                padding: 16px 12px;
+            }
+
+            .input-area {
+                padding: 12px 16px;
+                padding-bottom: max(12px, calc(env(safe-area-inset-bottom) + 12px));
+                gap: 8px;
+            }
+
+            .welcome-message {
+                padding: 40px 12px 30px;
+            }
+
+            .welcome-message::before {
+                width: 240px;
+                height: 240px;
+            }
+
+            .welcome-message .greeting {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+            }
+
+            .welcome-message .title {
+                font-size: 1.3rem;
+                line-height: 1.3;
+                margin-bottom: 10px;
+                gap: 8px;
+            }
+
+            .title-icon {
+                width: 24px;
+                height: 24px;
+            }
+
+            .welcome-message .subtitle {
+                font-size: 0.85rem;
+                line-height: 1.5;
+                max-width: 100%;
+                padding: 0 4px;
+            }
+
+            .message {
+                max-width: 88%;
+                padding: 11px 14px;
+                font-size: 14px;
+                line-height: 1.5;
+                border-radius: 14px;
+            }
+
+            .input-field {
+                padding: 11px 14px;
+                font-size: 16px;
+                border-radius: 22px;
+            }
+
+            .send-button {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                min-height: 40px;
+            }
+
+            .send-button::after {
+                border-left-width: 7px;
+                border-top-width: 5px;
+                border-bottom-width: 5px;
+            }
+
+            .trace-button {
+                padding: 7px 12px;
+                font-size: 12px;
+            }
+
+            .sources-panel {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .typing-indicator {
+                padding: 11px 14px;
+                max-width: 88%;
+            }
+
+            .typing-dot {
+                width: 6px;
+                height: 6px;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 360px) {
+            .logo-container img {
+                height: 30px;
+            }
+
+            .welcome-message .title {
+                font-size: 1.15rem;
+                margin-bottom: 8px;
+                gap: 6px;
+            }
+
+            .title-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .welcome-message .subtitle {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+
+            .message {
+                max-width: 90%;
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .input-field {
+                padding: 10px 12px;
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .logo-container img {
+                height: 35px;
+            }
+
+            .welcome-message {
+                padding: 30px 20px 20px;
+            }
+
+            .welcome-message::before {
+                width: 200px;
+                height: 200px;
+            }
+
+            .welcome-message .title {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+                gap: 8px;
+            }
+
+            .title-icon {
+                width: 24px;
+                height: 24px;
+            }
+
+            .welcome-message .subtitle {
+                font-size: 0.85rem;
+            }
+
+            .chat-area {
+                padding: 16px;
+            }
+        }
+
+        /* Prevent text size adjustment on iOS */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            input[type="text"],
+            input[type="search"],
+            textarea {
+                font-size: 16px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-container">
+        <img src="./static/logo.png" alt="Jio Insurance Broking Ltd">
+    </div>
+</div>
+
+<div id="chat" class="chat-area">
+    <div class="welcome-message">
+        <div class="title">
+            
+            <span>Smriti - An AI enabled Regulatory Compliance Bot</span>
+        </div>
+        <div class="subtitle">An AI-enabled tool used strictly for internal enablement, providing first-level regulatory information and responses for insurance broking operations.</div>
+    </div>
+</div>
+
+<div class="typing-indicator" id="typingIndicator">
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+</div>
+
+<div class="input-area">
+    <input id="input" class="input-field" placeholder="Ask your query here..." autofocus>
+    <button class="send-button" onclick="send()"></button>
+</div>
+
+<script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const typingIndicator = document.getElementById('typingIndicator');
+    let isFirstMessage = true;
+
+    function addMessage(msg, type='bot') {
+        if (isFirstMessage && type === 'user') {
+            const welcome = chat.querySelector('.welcome-message');
+            if (welcome) welcome.remove();
+            isFirstMessage = false;
+        }
+
+        const div = document.createElement('div');
+        div.className = 'message ' + (type === 'user' ? 'user-message' : 'bot-message');
+        div.innerHTML = msg;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+        return div;
+    }
+
+    function showTyping() {
+        typingIndicator.style.display = 'flex';
+        chat.appendChild(typingIndicator);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function hideTyping() {
+        typingIndicator.style.display = 'none';
+    }
+
+    function addSourcesButton(messageDiv, sources) {
+        if (sources && sources.length > 0) {
+            const btn = document.createElement('button');
+            btn.className = 'trace-button';
+            btn.textContent = `📚 View Sources (${sources.length})`;
+            btn.onclick = () => {
+                let sourcesDiv = messageDiv.querySelector('.sources-panel');
+                if (!sourcesDiv) {
+                    sourcesDiv = document.createElement('div');
+                    sourcesDiv.className = 'sources-panel';
+                    sourcesDiv.innerHTML = '<strong style="color: #000000;">Sources:</strong><br>' +
+                        sources.map((s, idx) => {
+                            const file = s.file || s;
+                            const score = s.score ? ` (Score: ${s.score})` : '';
+                            return `<div class="source-item">${idx + 1}. ${file}${score}</div>`;
+                        }).join('');
+                    messageDiv.appendChild(sourcesDiv);
+                }
+                sourcesDiv.style.display = sourcesDiv.style.display === 'block' ? 'none' : 'block';
+            };
+            messageDiv.appendChild(btn);
+        }
+    }
+
+    async function send() {
+        const text = input.value.trim();
+        if (!text) return;
+        
+        addMessage(text, 'user');
+        showTyping();
+        input.value = '';
+        input.disabled = true;
+
+        try {
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: text })
+            });
+
+            const data = await response.json();
+            hideTyping();
+
+            if (response.ok && data.reply) {
+                const messageDiv = addMessage(data.reply, 'bot');
+                if (data.sources && data.sources.length > 0) {
+                    addSourcesButton(messageDiv, data.sources);
+                }
+            } else {
+                addMessage('Error: ' + (data.error || 'Something went wrong'), 'bot');
+            }
+        } catch (error) {
+            hideTyping();
+            addMessage('Error: ' + error.message, 'bot');
+        } finally {
+            input.disabled = false;
+            input.focus();
+        }
+    }
+
+    input.addEventListener('keypress', e => {
+        if (e.key === 'Enter' && !input.disabled) {
+            send();
+        }
+    });
+</script>
+</body>
+</html>
