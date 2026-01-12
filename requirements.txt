@@ -1,0 +1,3 @@
+Flask==2.3.3
+boto3==1.34.0
+gunicorn==21.2.0  # Required for production serving in App Runner
